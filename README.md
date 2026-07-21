@@ -34,6 +34,21 @@ Then, install the dependencies as usual:
 npm install
 ```
 
+## Environment variables
+
+Create your env file from the sample. The app loads
+`src/config/<ENVIRONMENT>.env`, so create `dev.env` for `npm run dev` and
+`prod.env` for `npm start`:
+
+```shell
+cp src/config/.env.example src/config/dev.env
+```
+
+Fill in your MongoDB Atlas connection (`DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_NAME`).
+
+> Installs use `legacy-peer-deps` (set in `.npmrc`) because the pinned 2021
+> dev tooling predates npm 7's stricter peer-dependency resolution.
+
 ## Running the server
 
 ### Development
@@ -131,8 +146,8 @@ curl http://127.0.0.1:3333/api/users?limit=1
 }
 ```
 
-Wrong type for `n` value will return _all the users_.
-Example: `users?limit=%27Hello%27`
+A non-numeric value falls back to the default (`limit` 40, `offset` 0).
+Example: `users?limit=%27Hello%27` returns the first 40 users.
 
 ##### GET /api/users?offset=10
 
@@ -181,8 +196,7 @@ curl http://127.0.0.1:3333/api/users?offset=10
 
 - Returns an object with a delay of 1 second (default)
 - Supports query string:
-  - ?limit=integer
-  - ?offset=integer
+  - ?delay=integer (milliseconds, min 1000, max 4000)
 
 #### Request:
 
@@ -242,4 +256,4 @@ curl http://127.0.0.1:3333/
 
 ## Notes:
 
-If you need help at the tie of [Migrating from mLab to MongoDB Atlas](./migrating-mlab-to-mongo-atlas.md)
+If you need it, see [Migrating from mLab to MongoDB Atlas](./migrating-mlab-to-mongo-atlas.md).

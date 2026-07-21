@@ -3,13 +3,12 @@ import { Users } from './model'
 
 export const getUsers = async (req, res) => {
   try {
-    const docs = await Users.find()
-      .limit(toNumber(req.query.limit || 40))
-      .skip(toNumber(req.query.offset))
-      .exec()
+    const limit = toNumber(req.query.limit, 40)
+    const offset = toNumber(req.query.offset, 0)
+    const docs = await Users.find().limit(limit).skip(offset).exec()
     res.status(200).json({ data: docs })
   } catch (err) {
     console.error(err)
-    res.status(400).end()
+    res.status(500).end()
   }
 }
